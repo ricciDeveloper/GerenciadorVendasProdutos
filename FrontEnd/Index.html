@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Produtos</title>
+     <!--normalize aplicado, famoso reset css-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+     <!--CSS-->
+    <link rel="stylesheet" href="./Assets/Css/Global.css">
+    <link rel="stylesheet" href="./Assets/Css/Style.css">
+    <!--Fonte roboto-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+
+</head>
+<body>
+    <header>
+        <h1>Produtos</h1>
+        <nav>
+            <ul>
+                <li><button onclick="createProduct()">Cadastrar Produto</button></li>
+                <li><button onclick="fetchAllProducts()">Buscar Todos Produtos</button></li>
+                <li><button onclick="fetchProductById()">Buscar Produto por ID</button></li>
+                <li><button onclick="updateProduct()">Atualizar Produto</button></li>
+                <li><button onclick="deleteProduct()">Deletar Produto</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Container para exibição dos produtos -->
+    <div class="products" id="productsList"></div>
+
+    <!-- Container para exibição dos detalhes do produto -->
+    <div id="productDetails"></div>
+
+    <script src="./Assets/Js/Script.js"></script>
+</body>
+</html>

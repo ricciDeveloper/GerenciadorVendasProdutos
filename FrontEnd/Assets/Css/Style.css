@@ -1,0 +1,45 @@
+h1{
+    text-transform: capitalize;
+    font-size: 50px;
+    font-weight: 700;
+    margin: 20px;
+}
+button{ 
+    background-color: black;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 10px;
+    width: 300px;
+}
+
+
+button:hover{
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+    transition: 1s;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 10px;
+    width: 300px;
+}
+
+.products {
+    display: none;  /* Inicialmente oculto */
+    justify-content: center;
+    margin: 20px;
+    border: 1px solid black;
+    gap: 5px;
+    padding: 10px;
+    width: 300px;
+    border-radius: 5px;
+}
+

@@ -7,19 +7,21 @@ import jakarta.persistence.*;
 public class ProductModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id_product;
     private String name;
     private double value_buy;
     private double value_sell;
     private int quantity;
     private double percent;
     //Getters and setters
-    public Long getId() {
-        return id;
+
+
+    public Long getId_product() {
+        return id_product;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setId_product(Long id_product) {
+        this.id_product = id_product;
     }
 
     public String getName() {

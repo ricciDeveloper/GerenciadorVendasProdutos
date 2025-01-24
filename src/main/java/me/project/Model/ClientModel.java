@@ -1,6 +1,10 @@
 package me.project.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "client")
@@ -11,8 +15,19 @@ public class ClientModel {
     private String name;
     private String phone;
 
+
+    @OneToMany(mappedBy = "client")
+    @JsonIgnore  // 🔥 Impede que a API retorne a lista de vendas no JSON
+    private List<SalesModel> sales;
     public Long getId() {
         return id;
+    }
+    public List<SalesModel> getSales() {
+        return sales;
+    }
+
+    public void setSales(List<SalesModel> sales) {
+        this.sales = sales;
     }
 
     public void setId(Long id) {

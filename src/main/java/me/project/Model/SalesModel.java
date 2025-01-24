@@ -1,10 +1,10 @@
 package me.project.Model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
 @Entity
 @Table(name = "sales")
 public class SalesModel {
@@ -14,17 +14,17 @@ public class SalesModel {
 
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
+    @JsonManagedReference
     private ClientModel client;
 
-    @ManyToMany
-    @JoinTable(
-            name = "sale_products",
-            joinColumns = @JoinColumn(name = "sale_id"),
-            inverseJoinColumns = @JoinColumn (name = "products_id")
-    )
-    private List<ProductModel> products;
+    @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<SaleItem> items; // Relacionamento correto
 
     private LocalDateTime saleDate;
+
+    // Getters e Setters
+
 
     public Long getId() {
         return id;
@@ -42,12 +42,12 @@ public class SalesModel {
         this.client = client;
     }
 
-    public List<ProductModel> getProducts() {
-        return products;
+    public List<SaleItem> getItems() {
+        return items;
     }
 
-    public void setProducts(List<ProductModel> products) {
-        this.products = products;
+    public void setItems(List<SaleItem> items) {
+        this.items = items;
     }
 
     public LocalDateTime getSaleDate() {

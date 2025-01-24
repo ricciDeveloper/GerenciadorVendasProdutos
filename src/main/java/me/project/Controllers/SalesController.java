@@ -1,12 +1,13 @@
 package me.project.Controllers;
 
+import me.project.Controllers.Config.DTO.SaleRequestDTO;
+import me.project.Controllers.Config.DTO.SaleResponseDTO;
 import me.project.Model.ClientModel;
 import me.project.Model.ProductModel;
+import me.project.Model.SaleItem;
 import me.project.Model.SalesModel;
 import me.project.Repository.ClientRepository;
 import me.project.Repository.ProductRepository;
-import me.project.Service.ClientService;
-import me.project.Service.ProductService;
 import me.project.Service.SaleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -38,27 +40,50 @@ public class SalesController {
     }
 
     @PostMapping("/criarNovaVenda")
-    public ResponseEntity<SalesModel> createSale(@RequestParam Long clientId,@RequestParam List<Long> productsId){
-        //find client in database
-        ClientModel clientModel = clientRepository.findById(clientId)
-                        .orElseThrow(() -> new RuntimeException("Client not found"));
+    public ResponseEntity<SaleResponseDTO> createSale(@RequestBody SaleRequestDTO request) {
+        ClientModel clientModel = clientRepository.findById(request.getClientId())
+                .orElseThrow(() -> new RuntimeException("Client not found"));
 
-        //find products in database
-        List<ProductModel> products = productRepository.findAllById(productsId);
+        List<SaleItem> items = new ArrayList<>();
 
-        if (products.isEmpty()){
-            throw new RuntimeException("Not found products");
+        for (SaleRequestDTO.ItemDTO itemDTO : request.getItems()){
+            System.out.println("Produto ID: " + itemDTO.getProductId() + ", Quantidade: " + itemDTO.getQuantity());
+            ProductModel productModel = productRepository.findById(itemDTO.getProductId())
+                    .orElseThrow(() -> new RuntimeException("Product not found" + itemDTO.getProductId()));
+            SaleItem item = new SaleItem();
+            item.setProduct(productModel);
+            item.setQuantity(itemDTO.getQuantity());
+            item.setUniPrice(productModel.getValue_sell());
+            items.add(item);
         }
 
-        //Create this sale and associate datas.
         SalesModel sale = new SalesModel();
-        sale.setClient(clientModel);
-        sale.setProducts(products);
 
+        sale.setClient(clientModel);
+        sale.setItems(items);
         sale.setSaleDate(LocalDateTime.now(ZoneId.of("America/Sao_Paulo")));
         service.createSale(sale);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(sale);
+
+        //DTO of answer
+        SaleResponseDTO responseDTO = new SaleResponseDTO();
+        responseDTO.setClientId(sale.getId());
+        responseDTO.setClientId(sale.getClient().getId());
+        responseDTO.setSaleDate(sale.getSaleDate());
+
+
+        List<SaleResponseDTO.ItemResponseDTO> itemResponseList = new ArrayList<>();
+        for(SaleItem item: sale.getItems()){
+            SaleResponseDTO.ItemResponseDTO itemDTO = new SaleResponseDTO.ItemResponseDTO();
+            itemDTO.setProductId(item.getProduct().getId_product());
+            itemDTO.setQuantity(item.getQuantity());
+            itemDTO.setUniPrice(item.getUniPrice());
+            itemResponseList.add(itemDTO);
+        }
+
+        responseDTO.setItems(itemResponseList);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
     @DeleteMapping("/deletarVenda")
